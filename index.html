@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#030305" id="meta-theme-color">
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="NIGHTMARE — Harmless interactive cybersecurity simulation prank.">
+  <meta name="robots" content="noindex, nofollow">
+  <title>NIGHTMARE // SECURITY SYSTEM</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/icon.svg">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./css/base.css">
+  <link rel="stylesheet" href="./css/effects.css">
+  <link rel="stylesheet" href="./css/stages.css">
+</head>
+<body class="phase-init" data-stage="1">
+  <div id="app" class="app-shell">
+    <!-- Background procedural canvas -->
+    <canvas id="ambient-canvas" class="ambient-canvas" aria-hidden="true"></canvas>
+
+    <!-- Atmospheric overlays (non-interactive, safe scanlines & vignette) -->
+    <div class="fx-scanlines" aria-hidden="true"></div>
+    <div class="fx-vignette" aria-hidden="true"></div>
+    <div class="fx-warning-wash" aria-hidden="true"></div>
+    <div class="fx-blackout" id="fx-blackout" aria-hidden="true"></div>
+
+    <!-- Top minimal HUD bar -->
+    <header class="hud-bar" id="hud-bar">
+      <div class="hud-identity">
+        <span class="hud-dot" aria-hidden="true"></span>
+        <span class="hud-brand">NIGHTMARE</span>
+        <span class="hud-divider" aria-hidden="true">//</span>
+        <span class="hud-session" id="hud-session">SESSION 0x9F4A</span>
+      </div>
+
+      <div class="hud-controls">
+        <button
+          type="button"
+          id="btn-audio"
+          class="hud-btn hud-btn-audio"
+          aria-pressed="false"
+          aria-label="Enable audio effects"
+          title="Toggle sound effects (M)"
+        >
+          <span class="hud-btn-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="icon-svg icon-sound-off">
+              <path d="M11 5L6 9H2v6h4l5 4V5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M22 9l-6 6M16 9l6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <svg viewBox="0 0 24 24" class="icon-svg icon-sound-on">
+              <path d="M11 5L6 9H2v6h4l5 4V5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="hud-btn-label" id="audio-label">SOUND OFF</span>
+        </button>
+
+        <button
+          type="button"
+          id="btn-fullscreen"
+          class="hud-btn hud-btn-fs"
+          aria-pressed="false"
+          aria-label="Enter fullscreen"
+          title="Toggle fullscreen (F)"
+        >
+          <span class="hud-btn-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="icon-svg icon-fs-enter">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <svg viewBox="0 0 24 24" class="icon-svg icon-fs-exit">
+              <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="hud-btn-label" id="fs-label">FULLSCREEN</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main stage viewport -->
+    <main class="stage-viewport" id="stage-viewport">
+      <!-- STAGE 1 & 2: INITIALIZATION & SIMULATED SCANNING -->
+      <section
+        id="stage-terminal"
+        class="stage stage-terminal is-active"
+        aria-live="polite"
+        aria-label="System terminal interface"
+      >
+        <div class="terminal-frame">
+          <div class="terminal-header">
+            <div class="emblem-wrap" aria-hidden="true">
+              <svg viewBox="0 0 64 64" class="shield-svg">
+                <path d="M32 6L54 15V31C54 45 44.5 55.2 32 59C19.5 55.2 10 45 10 31V15L32 6Z" fill="none" stroke="currentColor" stroke-width="2.5"/>
+                <path d="M32 19L42 39H22L32 19Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                <circle cx="32" cy="34" r="2" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="terminal-titles">
+              <h1 class="system-title glitch-text" data-text="NIGHTMARE SECURITY SYSTEM">
+                NIGHTMARE SECURITY SYSTEM
+              </h1>
+              <div class="system-subtitle-row">
+                <span class="status-pill" id="terminal-status-pill">INITIALIZING...</span>
+                <span class="telemetry-chip" id="telemetry-chip">SEC-CHANNEL // TLS-SIM</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="terminal-body">
+            <div class="terminal-chrome" aria-hidden="true">
+              <span class="chrome-label">VIRTUAL CONSOLE // ROOT SHELL</span>
+              <span class="chrome-hex" id="chrome-hex">0x004F :: SYNC</span>
+            </div>
+
+            <div class="terminal-log" id="terminal-log" role="log" aria-live="polite"></div>
+
+            <!-- Simulated scanner telemetry grid (illuminated in Stage 2) -->
+            <div class="scan-matrix" id="scan-matrix" aria-hidden="true">
+              <div class="scan-node" data-node="env">
+                <span class="scan-node-key">VIRTUAL ENV</span>
+                <span class="scan-node-val" id="node-env">STANDBY</span>
+              </div>
+              <div class="scan-node" data-node="sys">
+                <span class="scan-node-key">SIM SYSTEM</span>
+                <span class="scan-node-val" id="node-sys">STANDBY</span>
+              </div>
+              <div class="scan-node" data-node="sec">
+                <span class="scan-node-key">SEC STATUS</span>
+                <span class="scan-node-val" id="node-sec">WAIT</span>
+              </div>
+              <div class="scan-node" data-node="demo">
+                <span class="scan-node-key">DEMO NODE</span>
+                <span class="scan-node-val" id="node-demo">LOCKED</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="terminal-footer">
+            <div class="progress-meta">
+              <span class="progress-caption" id="progress-caption">BOOT SEQUENCE ACTIVE</span>
+              <span class="progress-percent" id="progress-percent">00%</span>
+            </div>
+            <div
+              class="progress-track"
+              role="progressbar"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="0"
+              id="progress-track"
+            >
+              <div class="progress-fill" id="progress-fill"></div>
+              <div class="progress-ticks" aria-hidden="true"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STAGE 3: SUSPENSE & COUNTDOWN -->
+      <section
+        id="stage-warning"
+        class="stage stage-warning"
+        aria-live="assertive"
+        aria-label="Security warning countdown"
+        hidden
+      >
+        <div class="warning-frame">
+          <div class="warning-badge" aria-hidden="true">
+            <svg viewBox="0 0 64 64" class="hazard-svg">
+              <path d="M32 8L58 54H6L32 8Z" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/>
+              <path d="M32 24V38" stroke="currentColor" stroke-width="3.8" stroke-linecap="round"/>
+              <circle cx="32" cy="46" r="2.4" fill="currentColor"/>
+            </svg>
+          </div>
+
+          <h2 class="warning-title glitch-text" data-text="WARNING">WARNING</h2>
+          <p class="warning-subtitle">UNAUTHORIZED ACCESS DETECTED</p>
+
+          <div class="countdown-dial">
+            <svg viewBox="0 0 220 220" class="dial-svg" aria-hidden="true">
+              <circle cx="110" cy="110" r="98" class="dial-track-outer"/>
+              <circle cx="110" cy="110" r="88" class="dial-track"/>
+              <circle cx="110" cy="110" r="88" class="dial-arc" id="countdown-arc"/>
+            </svg>
+            <div class="countdown-center">
+              <span class="countdown-label">LOCKDOWN IN</span>
+              <span class="countdown-number" id="countdown-number">10</span>
+            </div>
+          </div>
+
+          <div class="warning-ticker" id="warning-ticker">
+            <span class="ticker-dot" aria-hidden="true"></span>
+            <span id="warning-ticker-text">ANOMALY TRACE IN PROGRESS // DO NOT DISCONNECT</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- STAGE 4: THE BIG MOMENT -->
+      <section
+        id="stage-breach"
+        class="stage stage-breach"
+        aria-live="assertive"
+        aria-label="Critical alert sequence"
+        hidden
+      >
+        <div class="breach-frame">
+          <div class="breach-banner" id="breach-banner">
+            <div class="breach-rule" aria-hidden="true"></div>
+            <h2 class="breach-title glitch-text" data-text="SYSTEM BREACHED">SYSTEM BREACHED</h2>
+            <div class="breach-rule" aria-hidden="true"></div>
+          </div>
+
+          <div class="breach-alert" id="breach-alert">
+            <span class="breach-alert-tag">PRIORITY OMEGA</span>
+            <p class="breach-alert-text">CRITICAL SECURITY ALERT</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- STAGE 5: THE SURPRISE REVEAL -->
+      <section
+        id="stage-reveal"
+        class="stage stage-reveal"
+        aria-live="polite"
+        aria-label="Prank reveal message"
+        hidden
+      >
+        <canvas id="confetti-canvas" class="confetti-canvas" aria-hidden="true"></canvas>
+
+        <article class="reveal-card" id="reveal-card">
+          <div class="reveal-emoji-ring" id="reveal-emoji-ring" aria-hidden="true">
+            <span class="reveal-emoji">😂</span>
+          </div>
+
+          <h2 class="reveal-headline">JUST KIDDING! 😂</h2>
+          <p class="reveal-subhead">YOU HAVE BEEN PRANKED!</p>
+
+          <div class="safe-badge">
+            <span class="safe-check" aria-hidden="true">✓</span>
+            <span>YOUR DEVICE IS COMPLETELY SAFE.</span>
+          </div>
+
+          <ul class="reassurance-list">
+            <li class="reassurance-item">
+              <span class="item-dot" aria-hidden="true"></span>
+              <span>Nothing was hacked.</span>
+            </li>
+            <li class="reassurance-item">
+              <span class="item-dot" aria-hidden="true"></span>
+              <span>No files were accessed.</span>
+            </li>
+            <li class="reassurance-item">
+              <span class="item-dot" aria-hidden="true"></span>
+              <span>No personal information was collected.</span>
+            </li>
+          </ul>
+
+          <div class="reveal-actions">
+            <button type="button" id="btn-got-me" class="btn-primary-reveal">
+              <span id="btn-got-me-text">OKAY, YOU GOT ME 😂</span>
+            </button>
+
+            <div class="reveal-post-note" id="reveal-post-note" aria-live="polite"></div>
+
+            <div class="reveal-secondary-actions" id="reveal-secondary-actions">
+              <button type="button" id="btn-replay" class="btn-secondary-reveal">
+                Replay Simulation
+              </button>
+              <button type="button" id="btn-share" class="btn-secondary-reveal">
+                <span id="btn-share-label">Copy Prank Link</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="./js/audio.js"></script>
+  <script src="./js/effects.js"></script>
+  <script src="./js/fullscreen.js"></script>
+  <script src="./js/stages.js"></script>
+  <script src="./js/main.js"></script>
+</body>
+</html>
